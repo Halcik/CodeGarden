@@ -1,0 +1,12 @@
+{
+  "id": 0,
+  "title": "TYTUŁ_ZADANIA",
+  "description": "Opis zadania...",
+  "difficulty": "łatwe",
+  "hint": "Podpowiedź dla ucznia...",
+  "example_input": null,
+  "example_output": "",
+  "tags": [],
+  "function_name": null,
+  "time_limit": 2
+}

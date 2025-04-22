@@ -1,0 +1,10 @@
+{
+  "task_id": 0,
+  "basic_tests": [
+    {
+      "input": null,
+      "expected_output": ""
+    }
+  ],
+  "extra_tests": []
+}
