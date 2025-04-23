@@ -46,13 +46,13 @@ python/
 ```json
 {
   "task_id": 1,
-  "public_tests": [
+  "basic_tests": [
     {
       "input": null,
       "expected_output": "Witaj Świecie"
     }
   ],
-  "hidden_tests": []
+  "extra_tests": []
 }
 ```
 

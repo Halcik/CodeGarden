@@ -1,0 +1,16 @@
+{
+  "id": 2,
+  "title": "Suma dwóch liczb",
+  "description": "Wczytaj dwie liczby całkowite i wypisz ich sumę",
+  "difficulty": "bardzo łatwe",
+  "hint": "Użyj input(), int() i operatora '+'.",
+  "example_input": "3\n5",
+  "example_output": "8",
+  "tags": [
+    "input",
+    "int",
+    "sumowanie"
+  ],
+  "function_name": null,
+  "time_limit": 2
+}

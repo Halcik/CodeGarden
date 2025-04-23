@@ -1,0 +1,17 @@
+{
+  "id": 5,
+  "title": "Palindromowe liczby",
+  "description": "Sprawdź, czy podana liczba jest palindromem - czyli 'czytana' od tyłu jest identyczna",
+  "difficulty": "średnie",
+  "hint": "Zamień liczbę na string i porównaj z odwróconą wersją.",
+  "example_input": "12321",
+  "example_output": "TAK",
+  "tags": [
+    "napisy",
+    "str",
+    "warunki",
+    "indeksy"
+  ],
+  "function_name": null,
+  "time_limit": 2
+}

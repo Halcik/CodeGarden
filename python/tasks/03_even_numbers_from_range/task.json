@@ -1,0 +1,17 @@
+{
+  "id": 3,
+  "title": "Parzyste liczby z zakresu",
+  "description": "Wypisz wszystkie liczby parzyste od 1 do podanej liczby włącznie.",
+  "difficulty": "łatwe",
+  "hint": "Użyj pętli for i operatora % (reszta z dzielenia)",
+  "example_input": "10",
+  "example_output": "2\n4\n6\n8\n10",
+  "tags": [
+    "petla",
+    "modulo",
+    "range",
+    "for"
+  ],
+  "function_name": null,
+  "time_limit": 2
+}

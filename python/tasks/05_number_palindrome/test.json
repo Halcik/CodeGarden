@@ -1,0 +1,23 @@
+{
+  "task_id": 5,
+  "basic_tests": [
+    {
+      "input": "12321",
+      "expected_output": "TAK"
+    }
+  ],
+  "extra_tests": [
+    {
+      "input": "0",
+      "expected_output": "TAK"
+    },
+    {
+      "input": "11",
+      "expected_output": "TAK"
+    },
+    {
+      "input": "112",
+      "expected_output": "NIE"
+    }
+  ]
+}

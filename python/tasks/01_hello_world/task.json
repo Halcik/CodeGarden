@@ -2,7 +2,7 @@
   "id": 1,
   "title": "Witaj Świecie",
   "description": "Napisz program, który wyświetli 'Witaj Świecie'.",
-  "difficulty": "łatwe",
+  "difficulty": "bardzo łatwe",
   "hint": "Użyj funkcji print().",
   "example_input": null,
   "example_output": "Witaj Świecie",

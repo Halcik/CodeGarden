@@ -1,0 +1,17 @@
+{
+  "id": 4,
+  "title": "Licz samogłoski",
+  "description": "Policz, ile samogłosek znajduje się w podanym tekście.",
+  "difficulty": "średnie",
+  "hint": "Sprawdź każdy znak, czy jest w 'aąeęiouy'.",
+  "example_input": "Ala ma kota",
+  "example_output": "5",
+  "tags": [
+    "napisy",
+    "petla",
+    "for",
+    "warunki"
+  ],
+  "function_name": null,
+  "time_limit": 2
+}

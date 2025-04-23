@@ -1,0 +1,19 @@
+{
+  "task_id": 2,
+  "basic_tests": [
+    {
+      "input": "3\n5",
+      "expected_output": "8"
+    }
+  ],
+  "extra_tests": [
+    {
+      "input": "-10\n4",
+      "expected_output": "-6"
+    },
+    {
+      "input": "0\n0",
+      "expected_output": "0"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "task_id": 4,
+  "basic_tests": [
+    {
+      "input": "Ala ma kota",
+      "expected_output": "5"
+    }
+  ],
+  "extra_tests": [
+    {
+      "input": "xyz",
+      "expected_output": "0"
+    },
+    {
+      "input": "Eeeeee",
+      "expected_output": "6"
+    }
+  ]
+}
