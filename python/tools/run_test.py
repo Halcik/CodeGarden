@@ -28,5 +28,9 @@ if __name__ == '__main__':
   with open(test_file, 'r', encoding='utf-8') as test:
     test_data = json.load(test)
 
-  print(task_data)
-  print(test_data)
+  example_file = Path(task_path, "example.py")
+
+  with open(example_file, 'r', encoding='utf-8') as example:
+    example_data = example.read()
+
+  exec(example_data)  
