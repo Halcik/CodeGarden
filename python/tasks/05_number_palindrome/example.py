@@ -6,7 +6,3 @@ else:
   odp = "NIE"
 print(odp)
 
-# krótki if
-n = input("Podaj liczbę: ")
-print("TAK" if n == n[::-1] else "NIE")
-
