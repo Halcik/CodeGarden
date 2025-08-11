@@ -4,6 +4,7 @@ import json
 from io import StringIO
 from contextlib import redirect_stdout
 import colorama
+import multiprocessing
 
 colorama.init()
 input_data_list = []
