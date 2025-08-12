@@ -8,15 +8,28 @@ BASE = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE / "tasks" / "00_template"
 TASKS_DIR = BASE / "tasks"
 
+def check_ids(id: int) -> bool:
+    '''Sprawdza, czy ID jest wolne (True = można użyć, False = już zajęte).'''
+    for path in TASKS_DIR.iterdir():
+        if path.is_dir and re.match(r"^\d{2}_", path.name):
+            try:
+                if int(path.name.split("_")[0]) == id:
+                    return False
+            except Exception as e:
+                pass
+    return True            
+            
+
 def next_free_id() -> str:
     ids = []
     for path in TASKS_DIR.iterdir():
-        if path.is_dir and re.match(r"^\d{2,}_", path.name):
+        if path.is_dir and re.match(r"^\d{2}_", path.name):
             try:
                 ids.append(int(path.name.split("_")[0]))
             except Exception as e:
-                pass
+                pass       
     return str((max(ids)+1)) if ids else "1"        
+
 
 def create_new_task():
     task_id = input("Podaj ID zadania (Enter = następne wolne): ").strip()
@@ -24,6 +37,11 @@ def create_new_task():
         task_id = next_free_id()
 
     task_id = int(task_id)    
+
+    if not check_ids(task_id):
+        print("Podane id jest niedostępne")
+        return
+    
     title = unidecode(input("Podaj nazwę folderu zadania: ")).strip().replace(" ", "_").lower()
 
     folder_name = f"{task_id:02d}_{title}" #02d to dwucyfrowy format
@@ -54,6 +72,7 @@ def create_new_task():
             # indent - formatowanie jsona
 
     print(f"Dodano zadanie w ścieżce: {new_task_path}")
+
 
 if __name__ == "__main__":
     create_new_task()

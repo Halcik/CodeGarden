@@ -69,9 +69,9 @@ def test_code(task_path, type):
       print(colorama.Fore.GREEN+"Test przebiegł pomyślnie")
     else:
       print(colorama.Fore.RED+"Test NIE przebiegł pomyślnie")
-    print(colorama.Style.RESET_ALL, end="")   
+    print(colorama.Style.RESET_ALL, end="")  
 
-  print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n{passed}/{total} testów przeszło ({round(passed/total*100)}%)")
+  print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n{passed}/{total} testów przeszło ({round(passed/total*100) if total else 100}%)")
   globals()["input"] = original_input
 
 if __name__ == '__main__':
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
   folder_name = '_'.join(sys.argv[1:]).lower()
 
-  task_path = Path(task_path, folder_name)
+  task_path = task_path / folder_name
 
   if not task_path.exists():
     print("Zadanie nie istnieje, sprawdź jego nazwę jeszcze raz")
