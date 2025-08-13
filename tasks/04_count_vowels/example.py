@@ -1,5 +1,5 @@
 # Przykładowe rozwiązanie zadania
-text = input().lower()
+text = input("Podaj tekst: ").lower()
 vowels = 'aąeęiouy'
 count = 0
 for c in text:
