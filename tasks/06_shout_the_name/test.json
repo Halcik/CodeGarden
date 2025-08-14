@@ -1,0 +1,27 @@
+{
+  "task_id": 6,
+  "basic_tests": [
+    {
+      "input": "Julia",
+      "expected_output": "JULIA!!!"
+    },
+    {
+      "input": "adam",
+      "expected_output": "ADAM!!!"
+    },
+    {
+      "input": "Łukasz",
+      "expected_output": "ŁUKASZ!!!"
+    }
+  ],
+  "extra_tests": [
+    {
+      "input": "",
+      "expected_output": "!!!"
+    },
+    {
+      "input": "TeSt",
+      "expected_output": "TEST!!!"
+    }
+  ]
+}

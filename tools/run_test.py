@@ -5,6 +5,7 @@ from io import StringIO
 from contextlib import redirect_stdout
 import colorama
 import multiprocessing
+import importlib.util
 
 colorama.init()
 input_data_list = []
@@ -19,6 +20,49 @@ def fake_input(prompt=""):
     return value
   else:
     return ""
+
+
+def test_script(example_data):
+  output_test = StringIO()
+  try:
+    with redirect_stdout(output_test):
+      exec(example_data)
+  except Exception as e:
+    output = f"Wystąpił błąd: {e}"
+  else:
+    output = output_test.getvalue().strip()
+  return output  
+
+def test_function(example_file, function_name):
+  global input_data_list
+  path_to_import = str(example_file)
+  name_of_file = example_file.stem
+
+  spec = importlib.util.spec_from_file_location(name_of_file, path_to_import)
+  modul = importlib.util.module_from_spec(spec)
+  sys.modules[name_of_file] = modul
+  spec.loader.exec_module(modul)
+
+  func = getattr(modul, function_name) # zwraca obiekt funkcji z modułu.
+  output = func(*input_data_list) # normalnie się wywołuje
+  return output
+
+
+def print_test_result(output_data, output) -> int:
+  '''Funkcja wyświetla podsumowanie pojedynczego testu.
+  Zwraca 1, gdy przebiegł pomyślnie, 0 gdy się nie powiódł'''
+
+  print("Oczekiwane:", output_data)
+  print("Uzyskane:", output)
+
+  if output==output_data:
+    print(colorama.Fore.GREEN+"Test przebiegł pomyślnie")
+    return 1
+  
+  print(colorama.Fore.RED+"Test NIE przebiegł pomyślnie")
+  print(colorama.Style.RESET_ALL, end="")  
+  return 0
+
 
 def test_code(task_path, type):
   "Funkcja służąca do uruchamiania testów na napisanym kodzie - obecnie na przykładach"
@@ -41,6 +85,8 @@ def test_code(task_path, type):
   with open(example_file, 'r', encoding='utf-8') as example:
     example_data = example.read()
 
+  function_name = task_data['function_name']
+
   print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n~~ {type.replace('_', ' ').title()} ~~ ")
   for test in test_data[type]:
     print(colorama.Style.RESET_ALL, end="")
@@ -53,23 +99,12 @@ def test_code(task_path, type):
     else:
       input_data_list = []
 
-    output_test = StringIO()
-    try:
-      with redirect_stdout(output_test):
-        exec(example_data)
-    except Exception as e:
-      output = f"Wystąpił błąd: {e}"
+    if function_name:
+      output = test_function(example_file, function_name)  
     else:
-      output = output_test.getvalue().strip()
-    
-    print("Oczekiwane:", output_data)
-    print("Uzyskane:", output)
-    if output==output_data:
-      passed+=1
-      print(colorama.Fore.GREEN+"Test przebiegł pomyślnie")
-    else:
-      print(colorama.Fore.RED+"Test NIE przebiegł pomyślnie")
-    print(colorama.Style.RESET_ALL, end="")  
+      output = test_script(example_data)
+
+    passed += print_test_result(output_data, output)  
 
   print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n{passed}/{total} testów przeszło ({round(passed/total*100) if total else 100}%)")
   globals()["input"] = original_input
@@ -94,8 +129,3 @@ if __name__ == '__main__':
 
   test_code(task_path, 'basic_tests')
   test_code(task_path, 'extra_tests')
-
-
-
-    
-  

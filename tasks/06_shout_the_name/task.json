@@ -1,0 +1,16 @@
+{
+  "id": 6,
+  "title": "Wykrzycz imię",
+  "description": "Stwórz funkcję, która zwróci stringa w postaci: JULIA!!!. Gdyby użytkownik zapomniał imienia, po prostu zwróć trzy wykrzykniki",
+  "difficulty": "łatwe",
+  "hint": "Podpowiedź dla ucznia...",
+  "example_input": "Julia",
+  "example_output": "JULIA!!!",
+  "tags": [
+    "string",
+    "funkcje",
+    "if"
+  ],
+  "function_name": "shout_name",
+  "time_limit": 2
+}
