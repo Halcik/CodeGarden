@@ -3,7 +3,8 @@
   "basic_tests": [
     {
       "input": null,
-      "expected_output": ""
+      "expected_output": "",
+      "checker": "exact, contains or regex"
     }
   ],
   "extra_tests": []

@@ -3,21 +3,25 @@
   "basic_tests": [
     {
       "input": "12321",
-      "expected_output": "TAK"
+      "expected_output": "TAK",
+      "checker": "exact"
     }
   ],
   "extra_tests": [
     {
       "input": "0",
-      "expected_output": "TAK"
+      "expected_output": "TAK",
+      "checker": "exact"
     },
     {
       "input": "11",
-      "expected_output": "TAK"
+      "expected_output": "TAK",
+      "checker": "exact"
     },
     {
       "input": "112",
-      "expected_output": "NIE"
+      "expected_output": "NIE",
+      "checker": "exact"
     }
   ]
 }

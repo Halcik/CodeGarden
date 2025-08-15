@@ -3,17 +3,20 @@
   "basic_tests": [
     {
       "input": "10",
-      "expected_output": "0\n2\n4\n6\n8\n10"
+      "expected_output": "0\n2\n4\n6\n8\n10",
+      "checker": "exact"
     }
   ],
   "extra_tests": [
     {
       "input": "1",
-      "expected_output": "0"
+      "expected_output": "0",
+      "checker": "exact"
     },
     {
       "input": "6",
-      "expected_output": "0\n2\n4\n6"
+      "expected_output": "0\n2\n4\n6",
+      "checker": "exact"
     }
   ]
 }

@@ -3,17 +3,20 @@
   "basic_tests": [
     {
       "input": "3\n5",
-      "expected_output": "8"
+      "expected_output": "8",
+      "checker": "contains"
     }
   ],
   "extra_tests": [
     {
       "input": "-10\n4",
-      "expected_output": "-6"
+      "expected_output": "-6",
+      "checker": "contains"
     },
     {
       "input": "0\n0",
-      "expected_output": "0"
+      "expected_output": "0",
+      "checker": "contains"
     }
   ]
 }

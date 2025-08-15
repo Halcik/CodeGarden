@@ -6,6 +6,7 @@ from contextlib import redirect_stdout
 import colorama
 import multiprocessing
 import importlib.util
+import re
 
 colorama.init()
 input_data_list = []
@@ -48,14 +49,19 @@ def test_function(example_file, function_name):
   return output
 
 
-def print_test_result(output_data, output) -> int:
+def print_test_result(output_data, output, checker) -> int:
   '''Funkcja wyświetla podsumowanie pojedynczego testu.
   Zwraca 1, gdy przebiegł pomyślnie, 0 gdy się nie powiódł'''
 
-  print("Oczekiwane:", output_data)
-  print("Uzyskane:", output)
+  print(f"Oczekiwane: {output_data}")
+  print(f"Uzyskane: {output}")
+  print(f"Forma sprawdzania: {checker}")
 
-  if output==output_data:
+  if (
+    (checker == "exact" and output_data == output) or
+    (checker == "contains" and output_data in output) or
+    (checker == "regex" and re.search(output_data, output))
+    ):
     print(colorama.Fore.GREEN+"Test przebiegł pomyślnie")
     return 1
   
@@ -104,7 +110,7 @@ def test_code(task_path, type):
     else:
       output = test_script(example_data)
 
-    passed += print_test_result(output_data, output)  
+    passed += print_test_result(output_data, output, test['checker'])  
 
   print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n{passed}/{total} testów przeszło ({round(passed/total*100) if total else 100}%)")
   globals()["input"] = original_input

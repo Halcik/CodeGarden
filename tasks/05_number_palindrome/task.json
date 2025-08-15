@@ -1,7 +1,7 @@
 {
   "id": 5,
   "title": "Palindromowe liczby",
-  "description": "Sprawdź, czy podana liczba jest palindromem - czyli 'czytana' od tyłu jest identyczna",
+  "description": "Sprawdź, czy podana liczba jest palindromem - czyli 'czytana' od tyłu jest identyczna. Wyświetl TAK, jeśli to palindorm, NIE, jeśli nim nie jest",
   "difficulty": "średnie",
   "hint": "Zamień liczbę na string i porównaj z odwróconą wersją.",
   "example_input": "12321",

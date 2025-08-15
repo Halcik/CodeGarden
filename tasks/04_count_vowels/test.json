@@ -3,17 +3,20 @@
   "basic_tests": [
     {
       "input": "Ala ma kota",
-      "expected_output": "5"
+      "expected_output": "5",
+      "checker": "contains"
     }
   ],
   "extra_tests": [
     {
       "input": "xyz",
-      "expected_output": "1"
+      "expected_output": "1",
+      "checker": "contains"
     },
     {
       "input": "Eeeeee",
-      "expected_output": "6"
+      "expected_output": "6",
+      "checker": "contains"
     }
   ]
 }

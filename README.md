@@ -58,7 +58,8 @@ CODEGARDEN/
   "basic_tests": [
     {
       "input": null,
-      "expected_output": "Witaj Świecie"
+      "expected_output": "Witaj Świecie",
+      "checker": "contains"
     }
   ],
   "extra_tests": []
@@ -96,6 +97,21 @@ CODEGARDEN/
    ```
  2. Skrypt wczyta wybrane zadanie (jeśli istnieje) i wykona przypisane do niego testy. Po zakończeniu wyświetli ich wyniki oraz podsumowanie zaliczonych testów.
  ![alt text](https://jpcdn.it/img/0c8973d616c4c18f5a2a96dc114408a8.png)
+
+## 🧾 Rodzaje `checker` w testach
+
+Pole `checker` określa sposób porównania wyniku programu ucznia z oczekiwanym wynikiem (`expected_output`).
+
+| checker     | Opis działania | Przykład `expected_output` | Kiedy używać |
+|-------------|----------------|----------------------------|--------------|
+| **exact**   | Wynik musi być identyczny (znak w znak) z `expected_output`. | `"TAK"` | Gdy wymagany jest dokładny format i treść, bez odstępstw. |
+| **contains**| Wynik musi zawierać w sobie podany fragment. | `"Hello"` | Gdy dopuszczasz dodatkowy tekst, komentarze lub inne elementy obok właściwej odpowiedzi. |
+| **regex**   | Wynik musi pasować do wzorca wyrażenia regularnego (Python `re.search`). | `^\\+48\\s\\d{3}\\s\\d{3}\\s\\d{3}$` | Gdy dopuszczasz wiele poprawnych wariantów formatu lub chcesz testować wzorce. |
+
+### Uwagi
+- Dla `regex` pamiętaj, aby **escape’ować backslashe** w JSON-ie (`\\d` zamiast `\d`).
+- Jeśli oczekujesz **dokładnego tekstu** (np. `INVALID`), możesz w regexie użyć `^INVALID$`.
+
 ## 🔮 Plany rozwoju
 
 W przyszłości **Code Garden** ma również wspierać rozwój dzieci w innych narzędziach:

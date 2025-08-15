@@ -3,7 +3,8 @@
   "basic_tests": [
     {
       "input": null,
-      "expected_output": "Witaj Świecie"
+      "expected_output": "Witaj Świecie",
+      "checker": "exact"
     }
   ],
   "extra_tests": []

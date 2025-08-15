@@ -1,0 +1,17 @@
+{
+  "id": 7,
+  "title": "Sformatuj numer telefonu",
+  "description": "Wczytaj jeden wiersz z numerem telefonu i wypisz go w ujednoliconym formacie: \"+48 XXX XXX XXX\". Numer wejściowy może być w jednym z formatów: \"XXX-XXX-XXX\", \"XXXXXXXXX\", \"XXX XXX XXX\", \"+48 XXX XXX XXX\", \"+48-XXX-XXX-XXX\" lub \"48 XXX XXX XXX\". Jeśli podany numer nie da się znormalizować do polskiego numeru (9 cyfr, opcjonalnie z prefiksem kraju 48), wypisz \"INVALID\".",
+  "difficulty": "trudne",
+  "hint": "Usuń wszystkie znaki nienumeryczne, sprawdź liczbę cyfr (9 lub 11 z prefiksem 48), a potem sformatuj do \"+48 XXX XXX XXX\".",
+  "example_input": "123-456-789",
+  "example_output": "+48 123 456 789",
+  "tags": [
+    "regex",
+    "string",
+    "formatting",
+    "validation"
+  ],
+  "function_name": null,
+  "time_limit": 2
+}

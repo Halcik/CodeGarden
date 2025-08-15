@@ -1,0 +1,47 @@
+{
+  "task_id": 7,
+  "basic_tests": [
+    {
+      "input": "123-456-789",
+      "expected_output": "^\\+48\\s\\d{3}\\s\\d{3}\\s\\d{3}$",
+      "checker": "regex"
+    },
+    {
+      "input": "123456789",
+      "expected_output": "^\\+48\\s\\d{3}\\s\\d{3}\\s\\d{3}$",
+      "checker": "regex"
+    },
+    {
+      "input": "123 456 789",
+      "expected_output": "^\\+48\\s\\d{3}\\s\\d{3}\\s\\d{3}$",
+      "checker": "regex"
+    },
+    {
+      "input": "+48 123 456 789",
+      "expected_output": "^\\+48\\s\\d{3}\\s\\d{3}\\s\\d{3}$",
+      "checker": "regex"
+    },
+    {
+      "input": "+48-123-456-789",
+      "expected_output": "^\\+48\\s\\d{3}\\s\\d{3}\\s\\d{3}$",
+      "checker": "regex"
+    },
+    {
+      "input": "48 123 456 789",
+      "expected_output": "^\\+48\\s\\d{3}\\s\\d{3}\\s\\d{3}$",
+      "checker": "regex"
+    }
+  ],
+  "extra_tests": [
+    {
+      "input": "+49 123 456 789",
+      "expected_output": "^INVALID$",
+      "checker": "regex"
+    },
+    {
+      "input": "+48 123 456 78x",
+      "expected_output": "^INVALID$",
+      "checker": "regex"
+    }
+  ]
+}

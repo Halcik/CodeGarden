@@ -3,25 +3,30 @@
   "basic_tests": [
     {
       "input": "Julia",
-      "expected_output": "JULIA!!!"
+      "expected_output": "JULIA!!!",
+      "checker": "exact"
     },
     {
       "input": "adam",
-      "expected_output": "ADAM!!!"
+      "expected_output": "ADAM!!!",
+      "checker": "exact"
     },
     {
       "input": "Łukasz",
-      "expected_output": "ŁUKASZ!!!"
+      "expected_output": "ŁUKASZ!!!",
+      "checker": "exact"
     }
   ],
   "extra_tests": [
     {
       "input": "",
-      "expected_output": "!!!"
+      "expected_output": "!!!",
+      "checker": "exact"
     },
     {
       "input": "TeSt",
-      "expected_output": "TEST!!!"
+      "expected_output": "TEST!!!",
+      "checker": "exact"
     }
   ]
 }
