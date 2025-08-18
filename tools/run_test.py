@@ -55,24 +55,30 @@ def function_worker(student_path_file: str, function_name: str, name_of_file: st
     q.put(("err", f"Wystąpił błąd: {e}"))
 
 
-def test_script(example_data, timeout):
-  '''Funkcja do testowania skryptu'''
-  q = multiprocessing.Queue()
-  q.put(input_data_list)
-  p = multiprocessing.Process(target=script_worker, args=(example_data, q))
+def get_process_output(p: multiprocessing.Process, q: multiprocessing.Queue, timeout: int):
+  '''Uruchamia proces i zwraca jego wynik'''
   p.start()
-
   p.join(timeout)
+
   if p.is_alive():
     p.terminate()
     p.join() # dla upewnienia
     return "TIMEOUT"
+  
   if q.empty():
     return "BRAK WYNIKU"
   
   status, output = q.get()
   return output
 
+
+def test_script(example_data, timeout: int):
+  '''Funkcja do testowania skryptu'''
+  q = multiprocessing.Queue()
+  q.put(input_data_list)
+  p = multiprocessing.Process(target=script_worker, args=(example_data, q))
+  return get_process_output(p, q, timeout)
+  
 
 def test_function(example_file, function_name, timeout):
   '''Funkcja do testowania wyjść (return) funkcji'''
@@ -82,18 +88,7 @@ def test_function(example_file, function_name, timeout):
   q = multiprocessing.Queue()
   q.put(input_data_list)
   p = multiprocessing.Process(target=function_worker, args=(path_to_import, function_name, name_of_file, q))
-  p.start()
-
-  p.join(timeout)
-  if p.is_alive():
-    p.terminate()
-    p.join() # dla upewnienia
-    return "TIMEOUT"
-  if q.empty():
-    return "BRAK WYNIKU"
-  
-  status, output = q.get()
-  return output
+  return get_process_output(p, q, timeout)
 
 
 def print_test_result(output_data, output, checker) -> int:
@@ -158,6 +153,7 @@ def test_code(task_path, type_test):
     passed += print_test_result(output_data, output, test['checker'])  
 
   print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n{passed}/{total} testów przeszło ({round(passed/total*100) if total else 100}%)")
+
 
 if __name__ == '__main__':
   task_path = Path(__file__).resolve().parent.parent / 'tasks'
