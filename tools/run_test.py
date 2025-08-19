@@ -7,6 +7,7 @@ import colorama
 import multiprocessing
 import importlib.util
 import re
+from logger import logger, log_mess
 
 colorama.init()
 input_data_list = []
@@ -57,102 +58,119 @@ def function_worker(student_path_file: str, function_name: str, name_of_file: st
 
 def get_process_output(p: multiprocessing.Process, q: multiprocessing.Queue, timeout: int):
   '''Uruchamia proces i zwraca jego wynik'''
-  p.start()
-  p.join(timeout)
+  try:
+    p.start()
+    p.join(timeout)
 
-  if p.is_alive():
-    p.terminate()
-    p.join() # dla upewnienia
-    return "TIMEOUT"
-  
-  if q.empty():
-    return "BRAK WYNIKU"
-  
-  status, output = q.get()
-  return output
+    if p.is_alive():
+      p.terminate()
+      p.join() # dla upewnienia
+      log_mess("debug", f"Timeout")
+      return "TIMEOUT"
+    
+    if q.empty():
+      log_mess("debug", f"Brak wyniku")
+      return "BRAK WYNIKU"
+    
+    status, output = q.get()
+    return output
+  except Exception as e:
+    log_mess("error", f"Funkcja nie powiodła się: {e}")
 
 
 def test_script(example_data, timeout: int):
   '''Funkcja do testowania skryptu'''
-  q = multiprocessing.Queue()
-  q.put(input_data_list)
-  p = multiprocessing.Process(target=script_worker, args=(example_data, q))
-  return get_process_output(p, q, timeout)
+  try:
+    q = multiprocessing.Queue()
+    q.put(input_data_list)
+    p = multiprocessing.Process(target=script_worker, args=(example_data, q))
+    return get_process_output(p, q, timeout)
+  except Exception as e:
+    log_mess("error", f"Funkcja nie powiodła się: {e}")
   
 
 def test_function(example_file, function_name, timeout):
   '''Funkcja do testowania wyjść (return) funkcji'''
-  path_to_import = str(example_file)
-  name_of_file = example_file.stem
+  try:
+    path_to_import = str(example_file)
+    name_of_file = example_file.stem
 
-  q = multiprocessing.Queue()
-  q.put(input_data_list)
-  p = multiprocessing.Process(target=function_worker, args=(path_to_import, function_name, name_of_file, q))
-  return get_process_output(p, q, timeout)
+    q = multiprocessing.Queue()
+    q.put(input_data_list)
+    p = multiprocessing.Process(target=function_worker, args=(path_to_import, function_name, name_of_file, q))
+    return get_process_output(p, q, timeout)
+  except Exception as e:
+    log_mess("error", f"Funkcja nie powiodła się: {e}")
 
 
 def print_test_result(output_data, output, checker) -> int:
   '''Funkcja wyświetla podsumowanie pojedynczego testu.
   Zwraca 1, gdy przebiegł pomyślnie, 0 gdy się nie powiódł'''
+  try:
 
-  print(f"Oczekiwane: {output_data}")
-  print(f"Uzyskane: {output}")
-  print(f"Forma sprawdzania: {checker}")
+    print(f"Oczekiwane: {output_data}")
+    print(f"Uzyskane: {output}")
+    print(f"Forma sprawdzania: {checker}")
 
-  if (
-    (checker == "exact" and output_data == output) or
-    (checker == "contains" and output_data in output) or
-    (checker == "regex" and re.search(output_data, output))
-    ):
-    print(colorama.Fore.GREEN+"Test przebiegł pomyślnie")
-    return 1
-  
-  print(colorama.Fore.RED+"Test NIE przebiegł pomyślnie")
-  print(colorama.Style.RESET_ALL, end="")  
-  return 0
+    if (
+      (checker == "exact" and output_data == output) or
+      (checker == "contains" and output_data in output) or
+      (checker == "regex" and re.search(output_data, output))
+      ):
+      print(colorama.Fore.GREEN+"Test przebiegł pomyślnie")
+      return 1
+    
+    print(colorama.Fore.RED+"Test NIE przebiegł pomyślnie")
+    print(colorama.Style.RESET_ALL, end="")  
+    return 0
+  except Exception as e:
+    log_mess("error", f"Funkcja nie powiodła się: {e}")
 
 
 def test_code(task_path, type_test):
   "Funkcja służąca do uruchamiania testów na napisanym kodzie - obecnie na przykładach"
-  global input_index, input_data_list
+  try:
+    global input_index, input_data_list
 
-  passed = 0
-  total = 0
+    passed = 0
+    total = 0
 
-  task_file = Path(task_path, "task.json")
-  test_file = Path(task_path, "test.json")
-  example_file = Path(task_path, "example.py")
+    task_file = Path(task_path, "task.json")
+    test_file = Path(task_path, "test.json")
+    example_file = Path(task_path, "example.py")
 
-  with open(task_file, 'r', encoding="utf-8") as task:
-    task_data = json.load(task)
-  with open(test_file, 'r', encoding='utf-8') as test:
-    test_data = json.load(test)
-  with open(example_file, 'r', encoding='utf-8') as example:
-    example_data = example.read()
+    with open(task_file, 'r', encoding="utf-8") as task:
+      task_data = json.load(task)
+    with open(test_file, 'r', encoding='utf-8') as test:
+      test_data = json.load(test)
+    with open(example_file, 'r', encoding='utf-8') as example:
+      example_data = example.read()
 
-  function_name = task_data['function_name']
-  timeout = task_data['time_limit']
+    function_name = task_data['function_name']
+    timeout = task_data['time_limit']
 
-  print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n~~ {type_test.replace('_', ' ').title()} ~~ ")
-  for test in test_data[type_test]:
-    print(colorama.Style.RESET_ALL, end="")
-    total+=1
-    output_data = test['expected_output'].strip()
-    input_index = 0
+    print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n~~ {type_test.replace('_', ' ').title()} ~~ ")
+    for test in test_data[type_test]:
+      print(colorama.Style.RESET_ALL, end="")
+      total+=1
+      output_data = test['expected_output'].strip()
+      input_index = 0
 
-    if test['input']:
-      input_data_list = test['input'].splitlines()
-    else:
-      input_data_list = []
+      if test['input']:
+        input_data_list = test['input'].splitlines()
+      else:
+        input_data_list = []
 
-    if function_name:
-      output = test_function(example_file, function_name, timeout)  
-    else:
-      output = test_script(example_data, timeout)
+      if function_name:
+        output = test_function(example_file, function_name, timeout)  
+      else:
+        output = test_script(example_data, timeout)
 
-    passed += print_test_result(output_data, output, test['checker'])  
+      passed += print_test_result(output_data, output, test['checker'])  
 
-  print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n{passed}/{total} testów przeszło ({round(passed/total*100) if total else 100}%)")
+    print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n{passed}/{total} testów przeszło ({round(passed/total*100) if total else 100}%)")
+  except Exception as e:
+    log_mess("error", f"Funkcja nie powiodła się: {e}")
 
 
 if __name__ == '__main__':

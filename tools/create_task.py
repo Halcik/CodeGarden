@@ -3,6 +3,9 @@ import json
 from unidecode import unidecode
 from pathlib import Path
 import re
+from logger import logger, log_mess
+
+logger.info("test")
 
 BASE = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE / "tasks" / "00_template"
@@ -10,68 +13,84 @@ TASKS_DIR = BASE / "tasks"
 
 def check_ids(id: int) -> bool:
     '''Sprawdza, czy ID jest wolne (True = można użyć, False = już zajęte).'''
-    for path in TASKS_DIR.iterdir():
-        if path.is_dir and re.match(r"^\d{2}_", path.name):
-            try:
-                if int(path.name.split("_")[0]) == id:
-                    return False
-            except Exception as e:
-                pass
-    return True            
+    try:
+        for path in TASKS_DIR.iterdir():
+            if path.is_dir and re.match(r"^\d{2}_", path.name):
+                try:
+                    if int(path.name.split("_")[0]) == id:
+                        return False
+                except ValueError:
+                    log_mess("warning", f"Niepoprawna nazwa folderu: {path.name}")
+        return True
+    except Exception as e:
+        log_mess("error", f"Funkcja nie powiodła się: {e}")
+        return False
             
 
 def next_free_id() -> str:
-    ids = []
-    for path in TASKS_DIR.iterdir():
-        if path.is_dir and re.match(r"^\d{2}_", path.name):
-            try:
-                ids.append(int(path.name.split("_")[0]))
-            except Exception as e:
-                pass       
-    return str((max(ids)+1)) if ids else "1"        
+    '''Sprawdza następne wolne id'''
+    try:
+        ids = []
+        for path in TASKS_DIR.iterdir():
+            if path.is_dir and re.match(r"^\d{2}_", path.name):
+                try:
+                    ids.append(int(path.name.split("_")[0]))
+                except ValueError:
+                    log_mess("warning", f"Niepoprawna nazwa folderu: {path.name}")      
+        return str((max(ids)+1)) if ids else "1"
+    except Exception as e:
+        log_mess("error", f"Funkcja nie powiodła się: {e}")
+        return ""
 
 
 def create_new_task():
-    task_id = input("Podaj ID zadania (Enter = następne wolne): ").strip()
-    if not task_id:
-        task_id = next_free_id()
+    try:
+        task_id = input("Podaj ID zadania (Enter = następne wolne): ").strip()
+        if not task_id:
+            task_id = next_free_id()
 
-    task_id = int(task_id)    
+        task_id = int(task_id)    
 
-    if not check_ids(task_id):
-        print("Podane id jest niedostępne")
-        return
-    
-    title = unidecode(input("Podaj nazwę folderu zadania: ")).strip().replace(" ", "_").lower()
+        if not check_ids(task_id):
+            print("Podane id jest niedostępne")
+            return
+        
+        title = unidecode(input("Podaj nazwę folderu zadania: ")).strip().replace(" ", "_").lower()
 
-    folder_name = f"{task_id:02d}_{title}" #02d to dwucyfrowy format
-    new_task_path = TASKS_DIR / folder_name
+        if not title:
+            print("Nie podano tytułu zadania")
+            return
 
-    if new_task_path.exists():
-        print("Folder już istnieje!")
-        return
+        folder_name = f"{task_id:02d}_{title}" #02d to dwucyfrowy format
+        new_task_path = TASKS_DIR / folder_name
 
-    # Kopiowanie folderu z szablonu
-    shutil.copytree(TEMPLATE_DIR, new_task_path)
+        if new_task_path.exists():
+            print("Folder już istnieje!")
+            return
 
-    # Aktualizacja plików JSON
-    for file_name in ["task.json", "test.json"]:
-        path = new_task_path / file_name
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f) # ładuje jsona jako dict
+        # Kopiowanie folderu z szablonu
+        shutil.copytree(TEMPLATE_DIR, new_task_path)
 
-        # Zmiana ID
-        if file_name == "task.json":
-            data["id"] = task_id
-        elif file_name == "test.json":
-            data["task_id"] = task_id
+        # Aktualizacja plików JSON
+        for file_name in ["task.json", "test.json"]:
+            path = new_task_path / file_name
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f) # ładuje jsona jako dict
 
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2) # zapiuje dane z data (czyli dicta) do file
-            # ensure_asci=False by nie zapisywało ą jako kod ascii
-            # indent - formatowanie jsona
+            # Zmiana ID
+            if file_name == "task.json":
+                data["id"] = task_id
+            elif file_name == "test.json":
+                data["task_id"] = task_id
 
-    print(f"Dodano zadanie w ścieżce: {new_task_path}")
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2) # zapiuje dane z data (czyli dicta) do file
+                # ensure_asci=False by nie zapisywało ą jako kod ascii
+                # indent - formatowanie jsona
+
+        print(f"Dodano zadanie w ścieżce: {new_task_path}")
+    except Exception as e:
+        log_mess("error", f"Funkcja nie powiodła się: {e}")
 
 
 if __name__ == "__main__":
