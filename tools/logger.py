@@ -39,7 +39,7 @@ def log_mess(level: str, message: str):
     file = Path(frame.f_code.co_filename).name
     func = frame.f_code.co_name
 
-    prefix = f"|{file} | {func}]"
+    prefix = f"{file} | {func}()]"
     full_message = f"{prefix} {message}"
 
     match level.lower():
@@ -59,11 +59,11 @@ def log_mess(level: str, message: str):
 
 def test_logger_levels():
   '''Testuje format i działanie loggera'''
-  logger.debug("debug info")
-  logger.info("info")
-  logger.warning("warning")
-  logger.error("error")
-  logger.critical("critical")
+  log_mess("debug", "debug info")
+  log_mess("info", "info")
+  log_mess("warning", "warning")
+  log_mess("error", "error")
+  log_mess("critical", "critical")
 
 
 logger = set_logging_format()

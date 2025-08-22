@@ -3,9 +3,8 @@ import json
 from unidecode import unidecode
 from pathlib import Path
 import re
-from logger import logger, log_mess
+from logger import log_mess
 
-logger.info("test")
 
 BASE = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE / "tasks" / "00_template"
@@ -52,20 +51,20 @@ def create_new_task():
         task_id = int(task_id)    
 
         if not check_ids(task_id):
-            print("Podane id jest niedostępne")
+            log_mess("warning", "Podane id jest niedostępne")
             return
         
         title = unidecode(input("Podaj nazwę folderu zadania: ")).strip().replace(" ", "_").lower()
 
         if not title:
-            print("Nie podano tytułu zadania")
+            log_mess("warning", "Nie podano tytułu zadania")
             return
 
         folder_name = f"{task_id:02d}_{title}" #02d to dwucyfrowy format
         new_task_path = TASKS_DIR / folder_name
 
         if new_task_path.exists():
-            print("Folder już istnieje!")
+            log_mess("warning", "Folder już istnieje!")
             return
 
         # Kopiowanie folderu z szablonu
@@ -88,7 +87,7 @@ def create_new_task():
                 # ensure_asci=False by nie zapisywało ą jako kod ascii
                 # indent - formatowanie jsona
 
-        print(f"Dodano zadanie w ścieżce: {new_task_path}")
+        log_mess("info", f"Dodano zadanie w ścieżce: {new_task_path}")
     except Exception as e:
         log_mess("error", f"Funkcja nie powiodła się: {e}")
 

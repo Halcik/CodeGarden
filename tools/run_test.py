@@ -7,7 +7,7 @@ import colorama
 import multiprocessing
 import importlib.util
 import re
-from logger import logger, log_mess
+from logger import log_mess
 
 colorama.init()
 input_data_list = []
@@ -65,14 +65,16 @@ def get_process_output(p: multiprocessing.Process, q: multiprocessing.Queue, tim
     if p.is_alive():
       p.terminate()
       p.join() # dla upewnienia
-      log_mess("debug", f"Timeout")
+      log_mess("warning", f"Timeout")
       return "TIMEOUT"
     
     if q.empty():
-      log_mess("debug", f"Brak wyniku")
+      log_mess("warning", f"Brak wyniku")
       return "BRAK WYNIKU"
     
     status, output = q.get()
+    if status =="err":
+      log_mess("error", output)
     return output
   except Exception as e:
     log_mess("error", f"Funkcja nie powiodła się: {e}")
@@ -168,7 +170,7 @@ def test_code(task_path, type_test):
 
       passed += print_test_result(output_data, output, test['checker'])  
 
-    print(colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n{passed}/{total} testów przeszło ({round(passed/total*100) if total else 100}%)")
+    log_mess("info", colorama.Style.BRIGHT+colorama.Fore.BLUE+f"\n{passed}/{total} testów przeszło ({round(passed/total*100) if total else 100}%)")
   except Exception as e:
     log_mess("error", f"Funkcja nie powiodła się: {e}")
 
@@ -177,7 +179,7 @@ if __name__ == '__main__':
   task_path = Path(__file__).resolve().parent.parent / 'tasks'
 
   if len(sys.argv) < 2:
-    print("Nie podano folderu przy starcie programu")
+    log_mess("info", "Nie podano folderu przy starcie programu")
     exit()
 
   sys.argv[1] = '0'+sys.argv[1] if sys.argv[1].isdigit() and len(sys.argv[1])<2 else sys.argv[1] # dokleja 0 jeśli nie ma
@@ -187,9 +189,9 @@ if __name__ == '__main__':
   task_path = task_path / folder_name
 
   if not task_path.exists():
-    print("Zadanie nie istnieje, sprawdź jego nazwę jeszcze raz")
+    log_mess("info", "Zadanie nie istnieje, sprawdź jego nazwę jeszcze raz")
     exit()
-  print(f"Wybrano folder {folder_name}")
+  log_mess("info", f"Wybrano folder {folder_name}")
 
   test_code(task_path, 'basic_tests')
   test_code(task_path, 'extra_tests')
