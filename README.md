@@ -10,10 +10,23 @@ Platforma edukacyjna do nauki programowania, stworzona z myślą o dzieciach i m
 - Szablon zadań i automatyczny ich generator (`create_task.py`)
 - W pełni rozszerzalna struktura folderów otwarta na rozbudowę o kolejne środowiska
 
+## 📌 Status projektu
+
+Projekt jest w fazie **prototypu** – działa już podstawowa infrastruktura do tworzenia i uruchamiania zadań:
+
+- Struktura katalogów (`tasks/`) z szablonem nowego zadania  
+- Skrypt `create_task.py` do generowania zadań na podstawie szablonu  
+- Obsługa plików `task.json` i `test.json` z opisem oraz testami  
+- Skrypt `run_test.py` do lokalnego uruchamiania testów w osobnych procesach 
+- Podgląd przykładowego rozwiązania (`example.py`)  
+
 ## 📁 Struktura katalogów
 
 ```
 CODEGARDEN/
+│
+│── logs/                 # Zawiera logi działania programu
+│   └── cg_YYYY-MM-DD.log
 │
 ├── tasks/                # Wszystkie zadania
 │   ├── 00_template/      # Szablon nowego zadania
@@ -26,6 +39,7 @@ CODEGARDEN/
 │
 ├── tools/                # Skrypty narzędziowe
 │   ├── create_task.py    # Tworzy nowe zadanie z szablonu
+│   ├── logger.py         # Ustawia format logowania działania programu
 │   └── run_test.py       # Uruchamia testy dla wybranego zadania
 │
 ├── README.md             # Dokumentacja projektu
