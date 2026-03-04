@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="pl" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Garden | Zadania</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="h-full gradient-bg text-main has-role-bar">
+
+    
+    <div class="role-bar">
+      <div class="role-bar-inner">
+        <div class="role-bar-brand"><span class="role-bar-title">Code Garden</span></div>
+        <div class="role-bar-actions">
+          {% if is_admin %}
+            <a href="{{ url_for('admin_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel admina</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif is_teacher %}
+            <a href="{{ url_for('teacher_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel nauczyciela</a>
+            
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif current_user %}
+            <a href="{{ url_for('student_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel ucznia</a>
+            <a href="{{ url_for('ranking') }}" class="btn-outline px-3 py-1 rounded-lg">Ranking</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('index') }}" class="btn-outline px-3 py-1 rounded-lg">Start</a>
+            <a href="{{ url_for('login') }}" class="btn-outline px-3 py-1 rounded-lg">Zaloguj</a>
+            <a href="{{ url_for('register') }}" class="btn-outline px-3 py-1 rounded-lg">Zarejestruj</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<div class="min-h-full">
+<main class="max-w-6xl mx-auto px-4 py-12 space-y-8">
+        <header class="glass-card rounded-3xl p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 fade-in">
+          <div>
+            <h2 class="text-3xl font-bold mb-2">Zadania w bibliotece</h2>
+            <p class="text-soft">Edytuj istniejące zadania lub przejdź do dodawania nowych.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="pill-accent px-4 py-2 rounded-full text-sm">
+              Łącznie: {{ tasks | length }}
+            </div>
+            <div class="pill-accent px-4 py-2 rounded-full text-sm">
+              Punkty: {{ total_points }}
+            </div>
+          </div>
+        </header>
+
+        <section class="glass-card rounded-2xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div class="text-sm text-soft">Filtry</div>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <select id="filter-status" class="input-field rounded-lg px-4 py-2 focus:outline-none focus:ring-1">
+              <option value="all">Wszystkie statusy</option>
+              <option value="completed">Ukończone</option>
+              <option value="started">Rozpoczęte</option>
+              <option value="not_started">Nie rozpoczęte</option>
+            </select>
+            <select id="filter-difficulty" class="input-field rounded-lg px-4 py-2 focus:outline-none focus:ring-1">
+              <option value="all">Wszystkie trudności</option>
+              <option value="bardzo łatwe">Bardzo łatwe</option>
+              <option value="łatwe">Łatwe</option>
+              <option value="średnie">Średnie</option>
+              <option value="trudne">Trudne</option>
+              <option value="bardzo trudne">Bardzo trudne</option>
+            </select>
+          </div>
+        </section>
+
+        {% if tasks %}
+          <div class="grid gap-4">
+            {% for task in tasks %}
+              <div class="glass-card rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 task-card {% if task.status == 'completed' %}task-complete{% elif task.status == 'started' %}task-started{% endif %}" data-href="{{ url_for('task_detail', folder=task.folder) }}" data-status="{{ task.status }}" data-difficulty="{{ task.difficulty|lower }}">
+                <div class="space-y-2">
+                  <div class="flex items-center gap-3">
+                    <h3 class="text-xl font-semibold">{{ task.title }}</h3>
+                    {% if task.difficulty %}
+                      <span class="pill-accent px-3 py-1 rounded-full text-xs">{{ task.difficulty }}</span>
+                    {% endif %}
+                  </div>
+                  <p class="text-muted text-sm">{{ task.description }}</p>
+                </div>
+                <div class="text-sm text-soft">
+                  Punkty: {{ task.points }}
+                </div>
+                {% if can_edit %}
+                  <div class="flex items-center gap-3">
+                    <a
+                      href="{{ url_for('edit_task', folder=task.folder) }}"
+                      class="btn-primary px-4 py-2 rounded-lg"
+                      data-stop
+                    >
+                      ✏️ Edytuj
+                    </a></div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="glass-card rounded-2xl p-10 text-center text-soft">
+            Brak zadań. Dodaj pierwsze, aby pojawiły się na liście.
+          </div>
+        {% endif %}
+      </main>
+    </div>
+    <script>
+      const statusFilter = document.getElementById("filter-status");
+      const difficultyFilter = document.getElementById("filter-difficulty");
+
+      function applyFilters() {
+        const statusValue = statusFilter ? statusFilter.value : "all";
+        const difficultyValue = difficultyFilter ? difficultyFilter.value : "all";
+        document.querySelectorAll(".task-card").forEach((card) => {
+          const status = card.dataset.status || "not_started";
+          const difficulty = (card.dataset.difficulty || "").toLowerCase();
+          const statusMatch = statusValue === "all" || status === statusValue;
+          const difficultyMatch = difficultyValue === "all" || difficulty === difficultyValue;
+          card.classList.toggle("hidden", !(statusMatch && difficultyMatch));
+        });
+      }
+
+      if (statusFilter) statusFilter.addEventListener("change", applyFilters);
+      if (difficultyFilter) difficultyFilter.addEventListener("change", applyFilters);
+
+      document.querySelectorAll(".task-card").forEach((card) => {
+        card.addEventListener("click", (event) => {
+          const isButton = event.target.closest("[data-stop], button, form");
+          if (isButton) return;
+          const href = card.dataset.href;
+          if (href) {
+            window.location.href = href;
+          }
+        });
+      });
+
+      document.querySelectorAll("[data-delete-form]").forEach((form) => {
+        form.addEventListener("submit", (event) => {
+          if (!confirm("Czy na pewno chcesz usunąć całe zadanie?")) {
+            event.preventDefault();
+          }
+        });
+      });
+    </script>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>

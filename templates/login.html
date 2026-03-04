@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pl" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Garden | Logowanie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="h-full gradient-bg text-main has-role-bar">
+
+    
+    <div class="role-bar">
+      <div class="role-bar-inner">
+        <div class="role-bar-brand"><span class="role-bar-title">Code Garden</span></div>
+        <div class="role-bar-actions">
+          {% if is_admin %}
+            <a href="{{ url_for('admin_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel admina</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif is_teacher %}
+            <a href="{{ url_for('teacher_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel nauczyciela</a>
+            
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif current_user %}
+            <a href="{{ url_for('student_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel ucznia</a>
+            <a href="{{ url_for('ranking') }}" class="btn-outline px-3 py-1 rounded-lg">Ranking</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('index') }}" class="btn-outline px-3 py-1 rounded-lg">Start</a>
+            <a href="{{ url_for('login') }}" class="btn-outline px-3 py-1 rounded-lg">Zaloguj</a>
+            <a href="{{ url_for('register') }}" class="btn-outline px-3 py-1 rounded-lg">Zarejestruj</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<div class="min-h-full">
+<main class="max-w-6xl mx-auto px-4 py-16">
+        <div class="max-w-md mx-auto glass-card rounded-3xl p-8 space-y-6 fade-in">
+          <div class="text-center space-y-2">
+            <h2 class="text-3xl font-bold">Logowanie</h2>
+            <p class="text-soft">Zaloguj się, aby zarządzać zadaniami.</p>
+          </div>
+
+          {% if error %}
+            <div class="glass-card rounded-2xl p-4 border border-danger text-danger">
+              {{ error }}
+            </div>
+          {% endif %}
+
+          <form method="post" action="{{ url_for('login') }}" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-soft mb-2">Login</label>
+              <input
+                type="text"
+                name="login"
+                value="{{ login or '' }}"
+                class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                placeholder="np. admin"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-soft mb-2">Hasło</label>
+              <input
+                type="password"
+                name="password"
+                class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                placeholder="••••••••"
+                required
+              />
+            </div>
+            <button type="submit" class="btn-primary w-full px-6 py-3 rounded-xl font-semibold">
+              Zaloguj
+            </button>
+            <p class="text-sm text-center text-muted">
+              Nie masz konta?
+              <a href="{{ url_for('register') }}" class="text-soft underline">Utwórz konto ucznia</a>
+            </p>
+          </form>
+        </div>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>

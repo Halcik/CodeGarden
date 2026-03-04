@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="pl" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Garden | Grupy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="h-full gradient-bg text-main has-role-bar">
+    <div class="role-bar">
+      <div class="role-bar-inner">
+        <div class="role-bar-brand"><span class="role-bar-title">Code Garden</span></div>
+        <div class="role-bar-actions">
+          {% if is_admin %}
+            <a href="{{ url_for('admin_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel admina</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif is_teacher %}
+            <a href="{{ url_for('teacher_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel nauczyciela</a>
+            
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif current_user %}
+            <a href="{{ url_for('student_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel ucznia</a>
+            <a href="{{ url_for('ranking') }}" class="btn-outline px-3 py-1 rounded-lg">Ranking</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('index') }}" class="btn-outline px-3 py-1 rounded-lg">Start</a>
+            <a href="{{ url_for('login') }}" class="btn-outline px-3 py-1 rounded-lg">Zaloguj</a>
+            <a href="{{ url_for('register') }}" class="btn-outline px-3 py-1 rounded-lg">Zarejestruj</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="min-h-full">
+      <main class="max-w-6xl mx-auto px-4 py-10 space-y-8">
+        <header class="glass-card rounded-3xl p-8 space-y-3 fade-in">
+          <h2 class="text-3xl font-bold">Grupy</h2>
+          <p class="text-soft">Zarządzaj przypisaniami uczniów i przeglądaj wyniki grup.</p>
+        </header>
+
+        {% if is_admin %}
+          <section id="create-group" class="glass-card rounded-3xl p-6 space-y-4">
+            <h3 class="text-xl font-semibold">Utwórz grupę</h3>
+            <form method="post" action="{{ url_for('create_group') }}" class="grid md:grid-cols-3 gap-4">
+              <input
+                type="text"
+                name="name"
+                class="input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                placeholder="Nazwa grupy"
+                required
+              />
+              <select
+                name="teacher_id"
+                class="input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                required
+              >
+                <option value="">Wybierz nauczyciela</option>
+                {% for teacher in teachers %}
+                  <option value="{{ teacher.id }}">{{ teacher.login }}</option>
+                {% endfor %}
+              </select>
+              <button type="submit" class="btn-primary px-6 py-3 rounded-xl font-semibold">Utwórz grupę</button>
+            </form>
+          </section>
+        {% endif %}
+
+        <section class="grid gap-4">
+          {% for group in groups %}
+            {% set stats = group_stats.get(group.id) %}
+            <div class="glass-card rounded-2xl p-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h3 class="text-xl font-semibold">{{ group.name }}</h3>
+                <p class="text-sm text-muted">Nauczyciel: {{ group.teacher.login }}</p>
+                <p class="text-xs text-muted">Uczniów: {{ stats.count if stats else 0 }}, Średnio pkt: {{ stats.avg_points if stats else 0 }}</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ url_for('group_detail', group_id=group.id) }}" class="btn-outline px-4 py-2 rounded-lg">Szczegóły</a>
+                <details class="group-edit">
+                  <summary class="btn-outline px-4 py-2 rounded-lg cursor-pointer">Edytuj</summary>
+                  <form method="post" action="{{ url_for('edit_group', group_id=group.id) }}" class="mt-3 grid gap-3 md:grid-cols-3">
+                    <input
+                      type="text"
+                      name="name"
+                      class="input-field rounded-lg px-4 py-2 focus:outline-none focus:ring-1"
+                      value="{{ group.name }}"
+                      required
+                    />
+                    {% if is_admin %}
+                      <select
+                        name="teacher_id"
+                        class="input-field rounded-lg px-4 py-2 focus:outline-none focus:ring-1"
+                        required
+                      >
+                        {% for teacher in teachers %}
+                          <option value="{{ teacher.id }}" {% if teacher.id == group.teacher.id %}selected{% endif %}>
+                            {{ teacher.login }}
+                          </option>
+                        {% endfor %}
+                      </select>
+                    {% else %}
+                      <input
+                        type="text"
+                        class="input-field rounded-lg px-4 py-2 focus:outline-none focus:ring-1"
+                        value="{{ group.teacher.login }}"
+                        disabled
+                      />
+                    {% endif %}
+                    <button type="submit" class="btn-primary px-4 py-2 rounded-lg">Zapisz</button>
+                  </form>
+                </details>
+                {% if is_admin %}
+                  <form method="post" action="{{ url_for('delete_group', group_id=group.id) }}">
+                    <button type="submit" class="btn-danger px-4 py-2 rounded-lg" onclick="return confirm('Czy na pewno chcesz usunąć tę grupę?');">
+                      Usuń
+                    </button>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          {% else %}
+            <div class="glass-card rounded-2xl p-6 text-muted">Brak dostępnych grup.</div>
+          {% endfor %}
+        </section>
+
+        <section class="glass-card rounded-3xl p-6 space-y-4">
+          <h3 class="text-xl font-semibold">Filtr uczniów po grupie</h3>
+          <form method="get" action="{{ url_for('groups_list') }}" class="grid md:grid-cols-2 gap-4">
+            <select
+              name="group_id"
+              class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+            >
+              <option value="">Wybierz grupę</option>
+              {% for group in groups %}
+                <option value="{{ group.id }}" {% if selected_group and selected_group.id == group.id %}selected{% endif %}>
+                  {{ group.name }}
+                </option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn-outline px-6 py-3 rounded-xl font-semibold">Filtruj</button>
+          </form>
+
+          {% if selected_group %}
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="text-lg font-semibold">{{ selected_group.name }}</h4>
+                <span class="pill-accent px-3 py-1 rounded-full text-sm">Uczniowie: {{ members | length }}</span>
+              </div>
+              {% for student in members %}
+                {% set progress = student_progress.get(student.id) %}
+                <div class="glass-card rounded-2xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <div>
+                    <p class="font-semibold">{{ student.login }}</p>
+                    <p class="text-xs text-muted">{{ student.email or 'brak' }}</p>
+                  </div>
+                  <div class="text-sm text-soft flex flex-wrap gap-3">
+                    <span>Ukończone: {{ progress.completed }} / {{ progress.total }}</span>
+                    <span>Rozpoczęte: {{ progress.started }}</span>
+                    <span>Punkty: {{ progress.points }}</span>
+                    <span class="pill-accent px-3 py-1 rounded-full">Postęp: {{ progress.percent }}%</span>
+                  </div>
+                </div>
+              {% else %}
+                <div class="text-muted">Brak uczniów w tej grupie.</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>

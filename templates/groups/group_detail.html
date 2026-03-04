@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pl" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Garden | Grupa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="h-full gradient-bg text-main has-role-bar">
+    <div class="role-bar">
+      <div class="role-bar-inner">
+        <div class="role-bar-brand"><span class="role-bar-title">Code Garden</span></div>
+        <div class="role-bar-actions">
+          {% if is_admin %}
+            <a href="{{ url_for('admin_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel admina</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif is_teacher %}
+            <a href="{{ url_for('teacher_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel nauczyciela</a>
+            
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif current_user %}
+            <a href="{{ url_for('student_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel ucznia</a>
+            <a href="{{ url_for('ranking') }}" class="btn-outline px-3 py-1 rounded-lg">Ranking</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('index') }}" class="btn-outline px-3 py-1 rounded-lg">Start</a>
+            <a href="{{ url_for('login') }}" class="btn-outline px-3 py-1 rounded-lg">Zaloguj</a>
+            <a href="{{ url_for('register') }}" class="btn-outline px-3 py-1 rounded-lg">Zarejestruj</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="min-h-full">
+      <main class="max-w-6xl mx-auto px-4 py-10 space-y-8">
+        <header class="glass-card rounded-3xl p-8 space-y-2">
+          <h2 class="text-3xl font-bold">{{ group.name }}</h2>
+          <p class="text-soft">Nauczyciel: {{ group.teacher.login }}</p>
+        </header>
+
+        <section class="glass-card rounded-3xl p-6 space-y-4">
+          <h3 class="text-xl font-semibold">Przypisz ucznia</h3>
+          <form method="post" action="{{ url_for('add_group_student', group_id=group.id) }}" class="grid md:grid-cols-2 gap-4">
+            <select
+              name="student_id"
+              class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+              required
+            >
+              <option value="">Wybierz ucznia</option>
+              {% for student in students %}
+                <option value="{{ student.id }}">{{ student.login }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn-primary px-6 py-3 rounded-xl font-semibold">Dodaj ucznia</button>
+          </form>
+        </section>
+
+        <section class="space-y-4">
+          <h3 class="text-2xl font-semibold">Uczniowie w grupie</h3>
+          {% for student in members %}
+            {% set progress = student_progress.get(student.id) %}
+            <div class="glass-card rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h4 class="text-lg font-semibold">{{ student.login }}</h4>
+                <p class="text-sm text-muted">Email: {{ student.email or 'brak' }}</p>
+                <p class="text-xs {% if student_activity.get(student.id) %}text-success{% else %}text-muted{% endif %}">
+                  {% if student_activity.get(student.id) %}Aktywny{% else %}Nieaktywny{% endif %}
+                </p>
+              </div>
+              <div class="flex items-center gap-4 text-sm text-soft">
+                <span>Ukończone: {{ progress.completed }} / {{ progress.total }}</span>
+                <span>Rozpoczęte: {{ progress.started }}</span>
+                <span>Punkty: {{ progress.points }}</span>
+                <span class="pill-accent px-3 py-1 rounded-full">Postęp: {{ progress.percent }}%</span>
+              </div>
+              <form method="post" action="{{ url_for('remove_group_student', group_id=group.id) }}">
+                <input type="hidden" name="student_id" value="{{ student.id }}" />
+                <button type="submit" class="btn-danger px-4 py-2 rounded-lg">Usuń z grupy</button>
+              </form>
+            </div>
+          {% else %}
+            <div class="glass-card rounded-2xl p-6 text-muted">Brak uczniów w grupie.</div>
+          {% endfor %}
+        </section>
+
+        <section class="glass-card rounded-3xl p-6 space-y-4">
+          <h3 class="text-2xl font-semibold">Ranking grupy</h3>
+          <div class="space-y-3">
+            {% for entry in ranking %}
+              <div class="glass-card rounded-2xl p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="pill-accent px-3 py-1 rounded-full text-sm">#{{ entry.rank }}</span>
+                  <span class="font-semibold">{{ entry.student.login }}</span>
+                </div>
+                <div class="text-sm text-soft">Punkty: {{ entry.points }}</div>
+              </div>
+            {% else %}
+              <div class="text-muted">Brak wyników do rankingu.</div>
+            {% endfor %}
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>

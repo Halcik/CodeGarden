@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pl" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Garden | Użytkownicy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="h-full gradient-bg text-main has-role-bar">
+    <div class="role-bar">
+      <div class="role-bar-inner">
+        <div class="role-bar-brand"><span class="role-bar-title">Code Garden</span></div>
+        <div class="role-bar-actions">
+          {% if is_admin %}
+            <a href="{{ url_for('admin_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel admina</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif is_teacher %}
+            <a href="{{ url_for('teacher_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel nauczyciela</a>
+            
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif current_user %}
+            <a href="{{ url_for('student_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel ucznia</a>
+            <a href="{{ url_for('ranking') }}" class="btn-outline px-3 py-1 rounded-lg">Ranking</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('index') }}" class="btn-outline px-3 py-1 rounded-lg">Start</a>
+            <a href="{{ url_for('login') }}" class="btn-outline px-3 py-1 rounded-lg">Zaloguj</a>
+            <a href="{{ url_for('register') }}" class="btn-outline px-3 py-1 rounded-lg">Zarejestruj</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="min-h-full">
+      <main class="max-w-6xl mx-auto px-4 py-12 space-y-6">
+        <header class="glass-card rounded-3xl p-8 space-y-3 fade-in">
+          <h2 class="text-3xl font-bold">Zarządzanie użytkownikami</h2>
+          <p class="text-soft">Ustawiaj role, resetuj hasła i usuwaj konta.</p>
+        </header>
+
+        {% if reset_notice %}
+          <section class="glass-card rounded-2xl p-4 border-success">
+            <p class="text-success font-semibold">Hasło zresetowane</p>
+            <p class="text-soft text-sm">Użytkownik: <strong>{{ reset_notice.login }}</strong></p>
+            <p class="text-soft text-sm">Tymczasowe hasło:</p>
+            <div class="code-field rounded-xl px-4 py-3 mt-2 text-sm">{{ reset_notice.temp_password }}</div>
+          </section>
+        {% endif %}
+
+        <section class="glass-card rounded-3xl p-6 space-y-4">
+          <h3 class="text-xl font-semibold">Użytkownicy</h3>
+          <div class="space-y-3">
+            {% for user in users %}
+              {% set roles = user_roles.get(user.id, []) %}
+              {% set is_self = current_user and current_user.id == user.id %}
+              <div class="glass-card rounded-2xl p-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p class="font-semibold">{{ user.login }}</p>
+                  <p class="text-xs text-muted">{{ user.email or 'brak' }}</p>
+                  <p class="text-xs text-muted">Role: {{ roles | join(', ') if roles else 'brak' }}</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <form method="post" action="{{ url_for('set_user_role', user_id=user.id) }}" class="flex items-center gap-2">
+                    <select
+                      name="role_name"
+                      class="input-field rounded-lg px-3 py-2 focus:outline-none focus:ring-1"
+                      {% if 'admin' in roles %}disabled{% endif %}
+                    >
+                      <option value="student" {% if 'student' in roles %}selected{% endif %}>student</option>
+                      <option value="teacher" {% if 'teacher' in roles %}selected{% endif %}>teacher</option>
+                    </select>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded-lg" {% if 'admin' in roles %}disabled{% endif %}>
+                      Ustaw rolę
+                    </button>
+                  </form>
+                  <form method="post" action="{{ url_for('admin_reset_password', user_id=user.id) }}">
+                    <button
+                      type="submit"
+                      class="btn-outline px-4 py-2 rounded-lg"
+                      {% if 'admin' in roles or is_self %}disabled{% endif %}
+                      onclick="return confirm('Zresetować hasło dla tego użytkownika?');"
+                    >
+                      Reset hasła
+                    </button>
+                  </form>
+                  <form method="post" action="{{ url_for('admin_delete_user', user_id=user.id) }}">
+                    <button
+                      type="submit"
+                      class="btn-danger px-4 py-2 rounded-lg"
+                      {% if 'admin' in roles or is_self %}disabled{% endif %}
+                      onclick="return confirm('Czy na pewno chcesz usunąć to konto?');"
+                    >
+                      Usuń
+                    </button>
+                  </form>
+                </div>
+              </div>
+            {% else %}
+              <div class="text-muted">Brak użytkowników.</div>
+            {% endfor %}
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>

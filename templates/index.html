@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="pl" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Garden | Start</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="h-full gradient-bg text-main has-role-bar">
+
+    
+    <div class="role-bar">
+      <div class="role-bar-inner">
+        <div class="role-bar-brand"><span class="role-bar-title">Code Garden</span></div>
+        <div class="role-bar-actions">
+          {% if is_admin %}
+            <a href="{{ url_for('admin_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel admina</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif is_teacher %}
+            <a href="{{ url_for('teacher_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel nauczyciela</a>
+            
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif current_user %}
+            <a href="{{ url_for('student_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel ucznia</a>
+            <a href="{{ url_for('ranking') }}" class="btn-outline px-3 py-1 rounded-lg">Ranking</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('index') }}" class="btn-outline px-3 py-1 rounded-lg">Start</a>
+            <a href="{{ url_for('login') }}" class="btn-outline px-3 py-1 rounded-lg">Zaloguj</a>
+            <a href="{{ url_for('register') }}" class="btn-outline px-3 py-1 rounded-lg">Zarejestruj</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<div class="min-h-full">
+<main class="max-w-6xl mx-auto px-4 py-12 space-y-10">
+        <section class="glass-card rounded-3xl p-10 grid md:grid-cols-2 gap-8 items-center fade-in">
+          <div class="space-y-4">
+            <p class="uppercase tracking-widest text-xs text-muted">Code Garden</p>
+            <h2 class="text-4xl md:text-5xl font-bold">
+              Nauka programowania przez zadania
+              <span class="python-accent">Python</span>
+            </h2>
+            <p class="text-soft text-lg">
+              Platforma wspiera uczniów w samodzielnym rozwiązywaniu zadań. Każde zadanie ma opis,
+              podpowiedź, przykładowe wejście i automatyczne testy.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              {% if current_user %}
+                <a href="{{ url_for('tasks_list') }}" class="btn-primary px-6 py-3 rounded-xl font-semibold">
+                  📚 Przejdź do zadań
+                </a>
+              {% else %}
+                <a href="{{ url_for('register') }}" class="btn-primary px-6 py-3 rounded-xl font-semibold">
+                  🚀 Rozpocznij przygodę
+                </a>
+                <a href="{{ url_for('login') }}" class="btn-outline px-6 py-3 rounded-xl font-semibold text-center">
+                  🔐 Zaloguj się
+                </a>
+              {% endif %}
+              <a href="#features" class="btn-outline px-6 py-3 rounded-xl font-semibold text-center">
+                Poznaj funkcje
+              </a>
+            </div>
+          </div>
+          <div class="glass-card rounded-2xl p-6 space-y-4 md:max-w-md md:ml-auto">
+            <div class="flex items-center justify-between">
+              <span class="text-soft text-sm">Szybki podgląd</span>
+              <span class="pill-accent px-3 py-1 rounded-full text-sm">Zadanie</span>
+            </div>
+            <div class="space-y-3">
+              <div class="glass-card rounded-xl p-4">
+                <p class="text-sm text-soft">Tytuł</p>
+                <p class="text-lg font-semibold">Policz samogłoski</p>
+              </div>
+              <div class="glass-card rounded-xl p-4">
+                <p class="text-sm text-soft">Opis</p>
+                <p class="text-sm text-muted">
+                  Napisz funkcję, która zlicza samogłoski w podanym tekście.
+                </p>
+              </div>
+              <div class="glass-card rounded-xl p-4">
+                <p class="text-sm text-soft">Testy</p>
+                <p class="text-sm text-muted">Przypadki podstawowe i brzegowe</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="features" class="grid md:grid-cols-3 gap-6">
+          <div class="glass-card rounded-2xl p-6 space-y-3">
+            <div class="text-2xl">🧠</div>
+            <h3 class="text-xl font-semibold">Zadania edukacyjne</h3>
+            <p class="text-muted">
+              Każde zadanie ma jasny opis, podpowiedź i przykładowe wejście/wyjście.
+            </p>
+          </div>
+          <div class="glass-card rounded-2xl p-6 space-y-3">
+            <div class="text-2xl">🧪</div>
+            <h3 class="text-xl font-semibold">Automatyczne sprawdzanie</h3>
+            <p class="text-muted">
+              System porównuje wyniki ucznia z testami podstawowymi i brzegowymi.
+            </p>
+          </div>
+          <div class="glass-card rounded-2xl p-6 space-y-3">
+            <div class="text-2xl">📁</div>
+            <h3 class="text-xl font-semibold">Rozwijalna baza zadań</h3>
+            <p class="text-muted">
+              Struktura katalogów ułatwia dodawanie nowych tematów i poziomów trudności.
+            </p>
+          </div>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-6">
+          <div class="glass-card rounded-3xl p-8 space-y-4">
+            <div class="text-3xl">🎒</div>
+            <h3 class="text-2xl font-semibold">Dla uczniów</h3>
+            <p class="text-muted">
+              Rozwiązuj zadania we własnym tempie, korzystaj z podpowiedzi i ucz się
+              przez praktykę z natychmiastową informacją zwrotną z testów.
+            </p>
+            <p class="text-muted">
+              Każde zadanie zawiera jasny opis, przykładowe wejście i wyjście oraz
+              zestaw testów, które pomagają zrozumieć oczekiwane działanie programu.
+            </p>
+          </div>
+          <div class="glass-card rounded-3xl p-8 space-y-4">
+            <div class="text-3xl">🧑‍🏫</div>
+            <h3 class="text-2xl font-semibold">Dla nauczycieli</h3>
+            <p class="text-muted">
+              Twórz i edytuj zadania, dodawaj testy podstawowe i brzegowe oraz
+              buduj bibliotekę materiałów dopasowanych do poziomu klasy.
+            </p>
+            <p class="text-muted">
+              System automatycznie tworzy strukturę plików, dzięki czemu możesz
+              skupić się na treści i jakości zadań.
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>

@@ -57,10 +57,48 @@ class UserRole(BaseModel):
     indexes = ((("user", "role"), True),) # para unikalna
 
 
+class Group(BaseModel):
+  name = CharField(unique=True)
+  teacher = ForeignKeyField(User, backref="teacher_groups", on_delete="CASCADE")
+
+
+class GroupMember(BaseModel):
+  group = ForeignKeyField(Group, backref="memberships", on_delete="CASCADE")
+  student = ForeignKeyField(User, backref="group_memberships", on_delete="CASCADE")
+
+  class Meta:
+    indexes = ((("group", "student"), True),)
+
+
+class TaskProgress(BaseModel):
+  student = ForeignKeyField(User, backref="task_progress", on_delete="CASCADE")
+  task_folder = CharField()
+  best_percent = IntegerField(default=0)
+  last_percent = IntegerField(default=0)
+  attempts = IntegerField(default=0)
+  points = IntegerField(default=0)
+  bonus_awarded = BooleanField(default=False)
+
+  class Meta:
+    indexes = ((("student", "task_folder"), True),)
+
+
+class TaskTestProgress(BaseModel):
+  student = ForeignKeyField(User, backref="test_progress", on_delete="CASCADE")
+  task_folder = CharField()
+  test_type = CharField()
+  test_index = IntegerField()
+  passed = BooleanField(default=False)
+  first_pass_attempt = IntegerField(null=True)
+
+  class Meta:
+    indexes = ((("student", "task_folder", "test_type", "test_index"), True),)
+
+
 def create_all_tables():
   '''Tworzy tabele w bazie danych'''
   with db:
-    db.create_tables([User, Role, UserRole])
+    db.create_tables([User, Role, UserRole, Group, GroupMember, TaskProgress, TaskTestProgress])
 
 
 def seed_roles():

@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="pl" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Garden | Zadanie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="h-full gradient-bg text-main has-role-bar">
+
+    
+    <div class="role-bar">
+      <div class="role-bar-inner">
+        <div class="role-bar-brand"><span class="role-bar-title">Code Garden</span></div>
+        <div class="role-bar-actions">
+          {% if is_admin %}
+            <a href="{{ url_for('admin_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel admina</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif is_teacher %}
+            <a href="{{ url_for('teacher_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel nauczyciela</a>
+            
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif current_user %}
+            <a href="{{ url_for('student_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel ucznia</a>
+            <a href="{{ url_for('ranking') }}" class="btn-outline px-3 py-1 rounded-lg">Ranking</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('index') }}" class="btn-outline px-3 py-1 rounded-lg">Start</a>
+            <a href="{{ url_for('login') }}" class="btn-outline px-3 py-1 rounded-lg">Zaloguj</a>
+            <a href="{{ url_for('register') }}" class="btn-outline px-3 py-1 rounded-lg">Zarejestruj</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<div class="min-h-full">
+<main class="max-w-6xl mx-auto px-4 py-10 space-y-6">
+        <header class="glass-card rounded-3xl p-8 space-y-4 fade-in">
+          <div class="flex flex-wrap items-center gap-3">
+            <h2 class="text-3xl font-bold">{{ task.title or 'Zadanie' }}</h2>
+            {% if task.difficulty %}
+              <span class="pill-accent px-3 py-1 rounded-full text-sm">{{ task.difficulty }}</span>
+            {% endif %}
+            <span class="pill-accent px-3 py-1 rounded-full text-sm">Punkty za to zadanie: {{ task_points }}</span>
+            <span class="pill-accent px-3 py-1 rounded-full text-sm">Łącznie punktów: {{ total_points }}</span>
+            {% if group %}
+              <span class="pill-accent px-3 py-1 rounded-full text-sm">
+                Grupa: {{ group.name }}
+              </span>
+              {% if group_points is not none %}
+                <span class="pill-accent px-3 py-1 rounded-full text-sm">
+                  Punkty w grupie: {{ group_points }}
+                </span>
+              {% endif %}
+              {% if rank_position %}
+                <span class="pill-accent px-3 py-1 rounded-full text-sm">
+                  Pozycja w rankingu: #{{ rank_position }}
+                </span>
+              {% endif %}
+            {% endif %}
+          </div>
+          <p class="text-soft text-lg">{{ task.description or '' }}</p>
+          {% if task.hint %}
+            <div class="glass-card rounded-2xl p-4 space-y-3">
+              <button type="button" class="btn-outline px-4 py-2 rounded-lg text-sm" id="hint-toggle">
+                💡 Pokaż podpowiedź
+              </button>
+              <div id="hint-content" class="hidden">
+                <p class="text-sm text-muted mb-2">Podpowiedź</p>
+                <p class="text-soft">{{ task.hint }}</p>
+              </div>
+            </div>
+          {% endif %}
+        </header>
+
+        <section class="grid lg:grid-cols-2 gap-6">
+          <div class="glass-card rounded-3xl p-6 space-y-4">
+            <h3 class="text-2xl font-semibold">Przykład</h3>
+            <div class="glass-card rounded-2xl p-4">
+              <p class="text-sm text-muted mb-2">Przykładowe wejście</p>
+              <pre class="code-editor text-green-300 whitespace-pre-wrap">{{ task.example_input or 'brak' }}</pre>
+            </div>
+            <div class="glass-card rounded-2xl p-4">
+              <p class="text-sm text-muted mb-2">Przykładowe wyjście</p>
+              <pre class="code-editor text-green-300 whitespace-pre-wrap">{{ task.example_output or 'brak' }}</pre>
+            </div>
+          </div>
+          <div class="glass-card rounded-3xl p-6 space-y-4">
+            <h3 class="text-2xl font-semibold">Twoje rozwiązanie</h3>
+            <form method="post" class="space-y-4" id="solution-form">
+              <div id="solution-editor" class="code-editor w-full code-field rounded-2xl editor-lg" ></div>
+              <textarea
+                name="solution_code"
+                id="solution-code"
+                class="hidden"
+              >{{ saved_code or '' }}</textarea>
+              <div class="flex flex-col sm:flex-row gap-3">
+                <button type="submit" name="action" value="save" class="btn-outline px-5 py-2 rounded-lg">
+                  💾 Zapisz kod
+                </button>
+                <button type="submit" name="action" value="test" class="btn-primary px-5 py-2 rounded-lg">
+                  ✅ Sprawdź rozwiązanie
+                </button>
+              </div>
+            </form>
+            <div class="text-sm text-muted">
+              Kod zapisuje się osobno od przykładu i możesz go uruchamiać w testach.
+            </div>
+            <div class="text-xs text-muted" id="autosave-status">Auto-zapis: gotowe</div>
+          </div>
+        </section>
+
+        {% if test_results %}
+          <section class="glass-card rounded-3xl p-6 space-y-4">
+            <div class="flex items-center gap-3">
+              <h3 class="text-2xl font-semibold">Wyniki testów</h3>
+              <span class="pill-accent px-3 py-1 rounded-full text-sm">
+                {{ test_results.summary.passed }}/{{ test_results.summary.total }} ({{ test_results.summary.percent }}%)
+              </span>
+              {% if points_awarded is not none %}
+                <span class="pill-accent px-3 py-1 rounded-full text-sm">
+                  Zdobyte punkty: {{ points_awarded }}
+                </span>
+              {% endif %}
+            </div>
+            <div class="text-sm text-soft">
+              Zaliczonych: {{ test_results.summary.passed }}, niezaliczonych: {{ test_results.summary.total - test_results.summary.passed }}
+            </div>
+            <div class="space-y-6">
+              <div>
+                <h4 class="text-lg font-semibold mb-3">Testy podstawowe</h4>
+                <div class="space-y-3">
+                  {% for result in test_results.basic_tests %}
+                    <div class="glass-card rounded-2xl p-4">
+                      <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-muted">Checker: {{ result.checker }}</span>
+                        <span class="text-sm {% if result.passed %}text-success{% else %}text-danger{% endif %}">
+                          {% if result.passed %}Zaliczony{% else %}Nie zaliczony{% endif %}
+                        </span>
+                      </div>
+                      <div class="text-sm text-muted">Wynik testu jest oceniony automatycznie.</div>
+                    </div>
+                  {% else %}
+                    <p class="text-muted">Brak testów podstawowych.</p>
+                  {% endfor %}
+                </div>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold mb-3">Testy dodatkowe</h4>
+                <div class="space-y-3">
+                  {% for result in test_results.extra_tests %}
+                    <div class="glass-card rounded-2xl p-4">
+                      <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-muted">Checker: {{ result.checker }}</span>
+                        <span class="text-sm {% if result.passed %}text-success{% else %}text-danger{% endif %}">
+                          {% if result.passed %}Zaliczony{% else %}Nie zaliczony{% endif %}
+                        </span>
+                      </div>
+                      <div class="text-sm text-muted">Wynik testu jest oceniony automatycznie.</div>
+                    </div>
+                  {% else %}
+                    <p class="text-muted">Brak testów dodatkowych.</p>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="glass-card rounded-2xl p-4 space-y-3">
+              <h4 class="text-lg font-semibold">Lista błędów</h4>
+              <div class="space-y-3 text-sm">
+                {% set ns = namespace(has_errors=false) %}
+                {% for result in test_results.basic_tests %}
+                  {% if not result.passed %}
+                    {% set ns.has_errors = true %}
+                    <div class="glass-card rounded-2xl p-3">
+                      <div class="text-muted mb-2">Test podstawowy #{{ loop.index }}</div>
+                      {% if result.error %}
+                        <div class="text-danger">{{ result.error }}</div>
+                      {% elif result.diff %}
+                        <pre class="code-editor text-green-300 whitespace-pre-wrap">{{ result.diff }}</pre>
+                      {% else %}
+                        <div class="text-danger">Wynik niezgodny z oczekiwaniem.</div>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+                {% for result in test_results.extra_tests %}
+                  {% if not result.passed %}
+                    {% set ns.has_errors = true %}
+                    <div class="glass-card rounded-2xl p-3">
+                      <div class="text-muted mb-2">Test dodatkowy #{{ loop.index }}</div>
+                      {% if result.error %}
+                        <div class="text-danger">{{ result.error }}</div>
+                      {% elif result.diff %}
+                        <pre class="code-editor text-green-300 whitespace-pre-wrap">{{ result.diff }}</pre>
+                      {% else %}
+                        <div class="text-danger">Wynik niezgodny z oczekiwaniem.</div>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+                {% if not ns.has_errors %}
+                  <div class="text-success">Brak błędów. Wszystkie testy zaliczone.</div>
+                {% endif %}
+              </div>
+            </div>
+          </section>
+        {% endif %}
+      </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script>
+      const hintToggle = document.getElementById("hint-toggle");
+      const hintContent = document.getElementById("hint-content");
+      if (hintToggle && hintContent) {
+        hintToggle.addEventListener("click", () => {
+          hintContent.classList.toggle("hidden");
+          hintToggle.textContent = hintContent.classList.contains("hidden")
+            ? "💡 Pokaż podpowiedź"
+            : "🙈 Ukryj podpowiedź";
+        });
+      }
+
+      const form = document.getElementById("solution-form");
+      const textarea = document.getElementById("solution-code");
+      const autosaveStatus = document.getElementById("autosave-status");
+      let autosaveTimer = null;
+
+      function setAutosaveStatus(text) {
+        if (autosaveStatus) {
+          autosaveStatus.textContent = text;
+        }
+      }
+
+      async function autosave() {
+        if (!form || !textarea) return;
+        const data = new FormData(form);
+        data.set("action", "save");
+        setAutosaveStatus("Auto-zapis: zapisywanie...");
+        try {
+          const response = await fetch(window.location.href, {
+            method: "POST",
+            body: data,
+          });
+          if (response.ok) {
+            setAutosaveStatus("Auto-zapis: zapisano");
+          } else {
+            setAutosaveStatus("Auto-zapis: błąd zapisu");
+          }
+        } catch (error) {
+          setAutosaveStatus("Auto-zapis: błąd zapisu");
+        }
+      }
+
+      function scheduleAutosave() {
+        setAutosaveStatus("Auto-zapis: oczekiwanie...");
+        clearTimeout(autosaveTimer);
+        autosaveTimer = setTimeout(autosave, 1200);
+      }
+
+      function initMonaco() {
+        if (!window.require || !textarea) return;
+        const initialValue = textarea.value || "";
+        window.require.config({
+          paths: {
+            vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs",
+          },
+        });
+        window.require(["vs/editor/editor.main"], () => {
+          const editor = monaco.editor.create(
+            document.getElementById("solution-editor"),
+            {
+              value: initialValue,
+              language: "python",
+              theme: "vs-dark",
+              automaticLayout: true,
+              minimap: { enabled: false },
+              fontSize: 14,
+              tabSize: 4,
+              insertSpaces: true,
+              lineNumbers: "on",
+            }
+          );
+
+          editor.onDidChangeModelContent(() => {
+            textarea.value = editor.getValue();
+            scheduleAutosave();
+          });
+
+          form.addEventListener("submit", () => {
+            textarea.value = editor.getValue();
+          });
+        });
+      }
+
+      initMonaco();
+    </script>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>

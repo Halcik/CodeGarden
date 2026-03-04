@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="pl" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Garden | Edytuj zadanie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="h-full gradient-bg text-main has-role-bar">
+
+    
+    <div class="role-bar">
+      <div class="role-bar-inner">
+        <div class="role-bar-brand"><span class="role-bar-title">Code Garden</span></div>
+        <div class="role-bar-actions">
+          {% if is_admin %}
+            <a href="{{ url_for('admin_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel admina</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif is_teacher %}
+            <a href="{{ url_for('teacher_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel nauczyciela</a>
+            
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% elif current_user %}
+            <a href="{{ url_for('student_panel') }}" class="btn-outline px-3 py-1 rounded-lg">Panel ucznia</a>
+            <a href="{{ url_for('ranking') }}" class="btn-outline px-3 py-1 rounded-lg">Ranking</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+            <form method="post" action="{{ url_for('logout') }}">
+              <button type="submit" class="btn-outline px-3 py-1 rounded-lg">Wyloguj</button>
+            </form>
+          {% else %}
+            <a href="{{ url_for('index') }}" class="btn-outline px-3 py-1 rounded-lg">Start</a>
+            <a href="{{ url_for('login') }}" class="btn-outline px-3 py-1 rounded-lg">Zaloguj</a>
+            <a href="{{ url_for('register') }}" class="btn-outline px-3 py-1 rounded-lg">Zarejestruj</a>
+            <button type="button" class="btn-outline px-3 py-1 rounded-lg theme-toggle" data-theme-toggle>
+              <span class="theme-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                </svg>
+              </span>
+              <span data-theme-label>Ciemny</span>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+
+    
+<div class="min-h-full">
+<main class="max-w-6xl mx-auto px-4 py-8 space-y-6">
+        <header class="glass-card rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 fade-in">
+          <div>
+            <h2 class="text-3xl font-bold mb-2">Edytuj zadanie</h2>
+            <p class="text-soft">Folder: {{ folder }}</p>
+          </div>
+          <div class="pill-accent px-4 py-2 rounded-full text-sm">
+            Edycja zadania
+          </div>
+        </header>
+
+        {% if errors %}
+          <div class="glass-card rounded-2xl p-4 border border-danger text-danger fade-in">
+            {% for error in errors %}
+              <div>{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <form method="post" action="{{ url_for('edit_task', folder=folder) }}" class="space-y-6">
+          <input type="hidden" name="basic_count" value="{{ basic_count }}" />
+          <input type="hidden" name="extra_count" value="{{ extra_count }}" />
+
+          <div class="glass-card rounded-2xl p-4">
+            <div class="flex gap-2 border-b border-accent">
+              <button type="button" data-tab="core" class="tab px-4 py-3 font-medium tab-active">🧩 Szczegóły</button>
+              <button type="button" data-tab="tests" class="tab px-4 py-3 font-medium rounded-t-lg">🧪 Testy</button>
+              <button type="button" data-tab="example" class="tab px-4 py-3 font-medium rounded-t-lg">💡 Przykład</button>
+            </div>
+
+            <div id="tab-core" class="tab-panel fade-in p-4 space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-soft mb-2">Tytuł zadania *</label>
+                <input
+                  type="text"
+                  name="title"
+                  required
+                  value="{{ task.title or '' }}"
+                  class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-soft mb-2">Opis zadania *</label>
+                <textarea
+                  name="description"
+                  rows="4"
+                  class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                >{{ task.description or '' }}</textarea>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-soft mb-2">Poziom trudności</label>
+                  <select
+                    name="difficulty"
+                    class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                  >
+                    {% set current = task.difficulty or '' %}
+                    <option value="bardzo łatwe" {% if current == 'bardzo łatwe' %}selected{% endif %}>bardzo łatwe</option>
+                    <option value="łatwe" {% if current == 'łatwe' %}selected{% endif %}>łatwe</option>
+                    <option value="średnie" {% if current == 'średnie' %}selected{% endif %}>średnie</option>
+                    <option value="trudne" {% if current == 'trudne' %}selected{% endif %}>trudne</option>
+                    <option value="bardzo trudne" {% if current == 'bardzo trudne' %}selected{% endif %}>bardzo trudne</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-soft mb-2">Limit czasu (sekundy)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    name="time_limit"
+                    value="{{ task.time_limit or 2 }}"
+                    class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-soft mb-2">Podpowiedź</label>
+                <input
+                  type="text"
+                  name="hint"
+                  value="{{ task.hint or '' }}"
+                  class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                  placeholder="np. użyj pętli for"
+                />
+              </div>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-soft mb-2">Przykładowe wejście</label>
+                  <input
+                    type="text"
+                    name="example_input"
+                    value="{{ task.example_input or '' }}"
+                    class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-soft mb-2">Przykładowe wyjście</label>
+                  <input
+                    type="text"
+                    name="example_output"
+                    value="{{ task.example_output or '' }}"
+                    class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                  />
+                </div>
+              </div>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-soft mb-2">Tagi (oddzielone przecinkami)</label>
+                  <input
+                    type="text"
+                    name="tags"
+                    value="{{ tags_value or '' }}"
+                    class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                    placeholder="podstawy, print"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-soft mb-2">Nazwa funkcji</label>
+                  <input
+                    type="text"
+                    name="function_name"
+                    value="{{ task.function_name or '' }}"
+                    class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                    placeholder="solve"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div id="tab-tests" class="tab-panel hidden fade-in p-4 space-y-6">
+              <div class="glass-card rounded-2xl p-4">
+                <h4 class="text-base font-semibold mb-2">Znaczenie checkerów</h4>
+                <div class="text-sm text-muted space-y-1">
+                  <div><strong>exact</strong> — wynik musi być identyczny znak w znak.</div>
+                  <div><strong>contains</strong> — wynik ma zawierać podany fragment.</div>
+                  <div><strong>regex</strong> — wynik ma pasować do wyrażenia regularnego.</div>
+                </div>
+              </div>
+              <div>
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
+                  <h3 class="text-lg font-semibold">Testy podstawowe</h3>
+                  <button type="button" class="btn-outline px-3 py-2 rounded-lg text-sm" data-add-row="basic">➕ Dodaj test</button>
+                </div>
+                <p class="text-sm text-muted mb-4">Zwyczajne przypadki, które powinny przechodzić bez niespodzianek.</p>
+                <div id="basic-rows" class="space-y-4">
+                  {% for row in basic_rows %}
+                    <div class="glass-card rounded-2xl p-4 space-y-3" data-test-row>
+                      <div class="grid md:grid-cols-3 gap-3">
+                        <div>
+                        <label class="block text-sm font-medium text-soft mb-2">Wejście</label>
+                        <input
+                          type="text"
+                          name="basic_input_{{ loop.index }}"
+                          value="{{ row.input }}"
+                          class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                        />
+                        </div>
+                        <div>
+                        <label class="block text-sm font-medium text-soft mb-2">Oczekiwany wynik</label>
+                        <input
+                          type="text"
+                          name="basic_expected_{{ loop.index }}"
+                          value="{{ row.expected_output }}"
+                          class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                        />
+                        </div>
+                        <div>
+                        <label class="block text-sm font-medium text-soft mb-2">Checker</label>
+                        <select
+                          name="basic_checker_{{ loop.index }}"
+                          class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                        >
+                          <option value="exact" {% if row.checker == "exact" %}selected{% endif %}>exact</option>
+                          <option value="contains" {% if row.checker == "contains" %}selected{% endif %}>contains</option>
+                          <option value="regex" {% if row.checker == "regex" %}selected{% endif %}>regex</option>
+                        </select>
+                        </div>
+                      </div>
+                      <div class="flex justify-end">
+                        <button type="button" class="btn-danger px-3 py-2 rounded-lg text-sm" data-remove-row>Usuń test</button>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+              <div>
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
+                  <h3 class="text-lg font-semibold">Testy dodatkowe</h3>
+                  <button type="button" class="btn-outline px-3 py-2 rounded-lg text-sm" data-add-row="extra">➕ Dodaj test</button>
+                </div>
+                <p class="text-sm text-muted mb-4">Służą do sprawdzenia skrajnych przypadków i nietypowych danych.</p>
+                <div id="extra-rows" class="space-y-4">
+                  {% for row in extra_rows %}
+                    <div class="glass-card rounded-2xl p-4 space-y-3" data-test-row>
+                      <div class="grid md:grid-cols-3 gap-3">
+                        <div>
+                        <label class="block text-sm font-medium text-soft mb-2">Wejście</label>
+                        <input
+                          type="text"
+                          name="extra_input_{{ loop.index }}"
+                          value="{{ row.input }}"
+                          class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                        />
+                        </div>
+                        <div>
+                        <label class="block text-sm font-medium text-soft mb-2">Oczekiwany wynik</label>
+                        <input
+                          type="text"
+                          name="extra_expected_{{ loop.index }}"
+                          value="{{ row.expected_output }}"
+                          class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                        />
+                        </div>
+                        <div>
+                        <label class="block text-sm font-medium text-soft mb-2">Checker</label>
+                        <select
+                          name="extra_checker_{{ loop.index }}"
+                          class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+                        >
+                          <option value="exact" {% if row.checker == "exact" %}selected{% endif %}>exact</option>
+                          <option value="contains" {% if row.checker == "contains" %}selected{% endif %}>contains</option>
+                          <option value="regex" {% if row.checker == "regex" %}selected{% endif %}>regex</option>
+                        </select>
+                        </div>
+                      </div>
+                      <div class="flex justify-end">
+                        <button type="button" class="btn-danger px-3 py-2 rounded-lg text-sm" data-remove-row>Usuń test</button>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <div id="tab-example" class="tab-panel hidden fade-in p-4 space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-soft mb-2">Przykładowe rozwiązanie</label>
+                <div id="example-editor" class="code-editor w-full code-field rounded-lg editor-md" ></div>
+                <textarea
+                  name="example_code"
+                  id="example-code"
+                  class="hidden"
+                >{{ example_code }}</textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col md:flex-row md:items-center md:justify-end gap-3"><button type="submit" class="btn-primary btn-same px-6 py-3 rounded-xl font-semibold">
+              💾 Zapisz zmiany
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script>
+      const tabs = document.querySelectorAll(".tab");
+      const panels = document.querySelectorAll(".tab-panel");
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((btn) => btn.classList.remove("tab-active"));
+          tab.classList.add("tab-active");
+          panels.forEach((panel) => panel.classList.add("hidden"));
+          const target = document.getElementById(`tab-${tab.dataset.tab}`);
+          if (target) {
+            target.classList.remove("hidden");
+          }
+        });
+      });
+
+      const addRowButtons = document.querySelectorAll("[data-add-row]");
+      const basicCountInput = document.querySelector("input[name='basic_count']");
+      const extraCountInput = document.querySelector("input[name='extra_count']");
+
+      function createRow(kind, index) {
+        return `
+          <div class="glass-card rounded-2xl p-4 space-y-3" data-test-row>
+            <div class="grid md:grid-cols-3 gap-3">
+              <div>
+              <label class="block text-sm font-medium text-soft mb-2">Wejście</label>
+              <input
+                type="text"
+                name="${kind}_input_${index}"
+                class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+              />
+              </div>
+              <div>
+              <label class="block text-sm font-medium text-soft mb-2">Oczekiwany wynik</label>
+              <input
+                type="text"
+                name="${kind}_expected_${index}"
+                class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+              />
+              </div>
+              <div>
+              <label class="block text-sm font-medium text-soft mb-2">Checker</label>
+              <select
+                name="${kind}_checker_${index}"
+                class="w-full input-field rounded-lg px-4 py-3 focus:outline-none focus:ring-1"
+              >
+                <option value="exact">exact</option>
+                <option value="contains">contains</option>
+                <option value="regex">regex</option>
+              </select>
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <button type="button" class="btn-danger px-3 py-2 rounded-lg text-sm" data-remove-row>Usuń test</button>
+            </div>
+          </div>
+        `;
+      }
+
+      addRowButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const kind = button.dataset.addRow;
+          const list = document.getElementById(`${kind}-rows`);
+          const countInput = kind === "basic" ? basicCountInput : extraCountInput;
+          const nextIndex = Number(countInput.value || 0) + 1;
+          countInput.value = String(nextIndex);
+          list.insertAdjacentHTML("beforeend", createRow(kind, nextIndex));
+        });
+      });
+
+      document.addEventListener("click", (event) => {
+        const target = event.target.closest("[data-remove-row]");
+        if (!target) return;
+        const row = target.closest("[data-test-row]");
+        if (!row) return;
+        row.remove();
+      });
+
+      document.querySelectorAll("[data-delete-form]").forEach((form) => {
+        form.addEventListener("submit", (event) => {
+          if (!confirm("Czy na pewno chcesz usunąć całe zadanie?")) {
+            event.preventDefault();
+          }
+        });
+      });
+
+      function initExampleEditor() {
+        if (!window.require) return;
+        const textarea = document.getElementById("example-code");
+        const container = document.getElementById("example-editor");
+        if (!textarea || !container) return;
+        window.require.config({
+          paths: {
+            vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs",
+          },
+        });
+        window.require(["vs/editor/editor.main"], () => {
+          const editor = monaco.editor.create(container, {
+            value: textarea.value || "",
+            language: "python",
+            theme: "vs-dark",
+            automaticLayout: true,
+            minimap: { enabled: false },
+            fontSize: 14,
+            tabSize: 4,
+            insertSpaces: true,
+            lineNumbers: "on",
+          });
+
+          editor.onDidChangeModelContent(() => {
+            textarea.value = editor.getValue();
+          });
+
+          const form = container.closest("form");
+          if (form) {
+            form.addEventListener("submit", () => {
+              textarea.value = editor.getValue();
+            });
+          }
+        });
+      }
+
+      initExampleEditor();
+    </script>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>
